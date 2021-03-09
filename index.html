@@ -2,8 +2,9 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Multi Line Chart</title>
+    <title>Horizontal Chart</title>
     <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <style></style>
 </head>
@@ -105,55 +106,37 @@
                 });
         }
         //-----------------------------DATA-----------------------------//
-        function loadData(tsvFile) {
-            var data = [{
-                "name": "Apples",
-                "value": 20,
-            },
-            {
-                "name": "Bananas",
-                "value": 12,
-            },
-            {
-                "name": "Grapes",
-                "value": 19,
-            },
-            {
-                "name": "Lemons",
-                "value": 5,
-            },
-            {
-                "name": "Limes",
-                "value": 16,
-            },
-            {
-                "name": "Oranges",
-                "value": 26,
-            },
-            {
-                "name": "Pears",
-                "value": 30,
-            }];
+        function loadData() {
+            const url = "https://script.google.com/a/macros/sph.com.sg/s/AKfycbwVjgt__c_7WUT0jv4UtfPlEcBHx8h2PnXgg_aCWHEGEzLNXHJWg84jmI6Ou0uBycBjrA/exec"
+            $.getJSON(url + "?callback=?",
+                { method: "horizontal" },
+                function (data) {
+                    var slices = data.slice(1).map(function (id, x) {
+                        return {
+                            name: id[0],
+                            value: id[1]
+                        };
+                    });
+                    slices = slices.sort(function (a, b) {
+                        return d3.ascending(a.value, b.value);
+                    })
 
-            data = data.sort(function (a, b) {
-                return d3.ascending(a.value, b.value);
-            })
+                    theData = slices;
 
-            theData = data;
-            //----------------------------SCALES----------------------------//
-            var categoriesNames = data.map(function (d) { return d.name; });
-            var rateNames = data.map(function (d) { return d.value; });
+                    //----------------------------SCALES----------------------------//
+                    var name = data.map(function (d) { return d.name; });
+                    var value = data.map(function (d) { return d.value; });
 
-            x.domain([0, d3.max(data, function (d) {
-                return d.value;
-            })]);
+                    x.domain([0, d3.max(theData, function (d) {
+                        return d.value;
+                    })]);
 
-            y.domain(data.map(function (d) {
-                return d.name;
-            }));
+                    y.domain(theData.map(function (d) {
+                        return d.name;
+                    }));
 
-            draw();
-
+                    draw();
+                })
         }
 
         //mouseover event handler function
