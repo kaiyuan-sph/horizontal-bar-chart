@@ -1,4 +1,4 @@
-#container  {
+#container {
     height: 100vh;
 }
 
@@ -59,4 +59,15 @@ text {
 .y-axis .tick line {
     stroke: #000000;
     stroke-opacity: 0.5;
+}
+
+#legend {
+    width: 350px;
+    margin: auto;
+}
+
+#container {
+    height: 600px;
+    max-width: 600px;
+    margin: auto;
 }
